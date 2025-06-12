@@ -10,3 +10,6 @@ typechain-types
 .vscode
 .idea
 bin
+
+# Local Netlify folder
+.netlify
