@@ -24,6 +24,7 @@ This project demonstrates how to implement a paywall for video content using the
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
@@ -37,11 +38,13 @@ This project demonstrates how to implement a paywall for video content using the
    ```
 
 4. Get Base Sepolia USDC for testing:
+
    - Visit https://faucet.circle.com/
    - Select Base Sepolia in the network dropdown
    - Request test USDC
 
 5. Start the development server:
+
    ```bash
    npm run dev
    ```

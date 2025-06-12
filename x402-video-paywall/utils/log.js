@@ -4,10 +4,10 @@ export function log(message, level = "info", error = null) {
 
   const timestamp = new Date().toISOString();
   let logMessage = `[${timestamp}] [${level}] ${message}`;
-  
+
   if (error) {
     logMessage += `\n${error.stack || error}`;
   }
-  
+
   console.log(logMessage);
 }

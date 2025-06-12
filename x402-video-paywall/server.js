@@ -30,8 +30,8 @@ app.use(
         network: network,
       },
     },
-    facilitatorObj
-  )
+    facilitatorObj,
+  ),
 );
 
 // Add request logging middleware

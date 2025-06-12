@@ -48,6 +48,10 @@ a {
   transition: color var(--transition-speed) ease;
 }
 
+.cta-button:hover {
+  color: white;
+}
+
 a:hover {
   color: var(--accent-color);
   text-decoration: underline;

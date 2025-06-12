@@ -8,7 +8,13 @@
     "dev": "nodemon server.js",
     "test": "node testAccess.js"
   },
-  "keywords": ["x402", "paywall", "video", "cryptocurrency", "blockchain"],
+  "keywords": [
+    "x402",
+    "paywall",
+    "video",
+    "cryptocurrency",
+    "blockchain"
+  ],
   "author": "",
   "license": "MIT",
   "description": "A demo application showing how to implement a video paywall using the x402 payment protocol",
