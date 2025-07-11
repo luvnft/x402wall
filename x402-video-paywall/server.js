@@ -9,51 +9,53 @@ dotenv.config();
 
 const app = express();
 
-// Use Base Sepolia (testnet) for development
-const network = "base-sepolia";
+// Network configuration
+const network = "base-sepolia"; // Using Base Sepolia testnet
 
-// ✅ Use your own Cloudflare-deployed 402-server
+// Facilitator configuration
 const facilitatorObj = {
-  url: "https://402-server.rpgdm2cbc4.workers.dev", // <-- Custom facilitator
+  url: "https://402-server.rpgdm2cbc4.workers.dev",
 };
 
-// Serve static files from the public directory
+// Middleware setup
 app.use(express.static(path.join(process.cwd(), "public")));
 app.use(express.json());
 
-// x402 payment middleware configuration
+// x402 payment middleware - corrected configuration
 app.use(
   paymentMiddleware({
-    walletAddress: process.env.WALLET_ADDRESS, // Your wallet address
+    walletAddress: process.env.WALLET_ADDRESS,
     routes: {
-      "GET /authenticate": {
-        price: "$0.10", // Example price
+      "/authenticate": {  // Changed from "GET /authenticate" to "/authenticate"
+        price: "$0.10",
         network,
+        method: "GET"  // Explicitly specify the method
       },
     },
     facilitator: facilitatorObj
   })
 );
 
-// Log each request
+// Enhanced logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
-  log(`${req.method} ${req.url}`);
-  log(`Request Headers: ${JSON.stringify(req.headers)}`);
-  res.on("finish", () => {
-    const duration = Date.now() - start;
-    log(`${req.method} ${req.url} - ${res.statusCode} (${duration}ms)`);
-  });
+  log(`Incoming request: ${req.method} ${req.url}`);
+  log(`Headers: ${JSON.stringify(req.headers)}`);
+  log(`Query params: ${JSON.stringify(req.query)}`);
   next();
 });
 
-// Redirect to paywalled content after payment
-app.get("/authenticate", (req, res) => {
-  log("✅ Payment verified, serving content");
+// Payment verification endpoint - modified to handle verification properly
+app.get("/authenticate", (req, res, next) => {
+  log("Payment verification in progress...");
+  
+  // The paymentMiddleware should have already verified the payment
+  // We just need to handle the successful case
+  log("✅ Payment verified, redirecting to content");
   res.redirect("/video-content");
 });
 
-// Actual gated video endpoint
+// Protected content endpoint
 app.get("/video-content", videoAccessHandler);
 
 // Homepage
@@ -61,12 +63,16 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });
 
-export default app;
+// Error handling middleware
+app.use((err, req, res, next) => {
+  log(`❌ Error: ${err.message}`);
+  res.status(500).json({ error: "Payment processing failed" });
+});
 
-// Local dev server
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 4021;
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
-  });
-}
+// Server setup
+const PORT = process.env.PORT || 4021;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
+
+export default app;
