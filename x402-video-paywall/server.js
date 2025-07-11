@@ -23,16 +23,16 @@ app.use(express.json());
 
 // x402 payment middleware configuration
 app.use(
-  paymentMiddleware(
-    process.env.WALLET_ADDRESS, // Your wallet address
-    {
+  paymentMiddleware({
+    walletAddress: process.env.WALLET_ADDRESS, // Your wallet address
+    routes: {
       "GET /authenticate": {
         price: "$0.10", // Example price
         network,
       },
     },
-    facilitatorObj
-  )
+    facilitator: facilitatorObj
+  })
 );
 
 // Log each request
@@ -67,6 +67,6 @@ export default app;
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 4021;
   app.listen(PORT, () => {
-    console.log(`🚀 Server running at https://x402wall.vercel.app/:${PORT}`);
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
   });
 }
